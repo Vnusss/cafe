@@ -8,40 +8,35 @@ date: "2024-02-09"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ```{r}
 library(readxl)
-coffee_complet <- read_excel("C:/Cafe/coffee_analysis.csv/coffee_complet.xlsx")
-View(coffee_complet)
+coffee_complet <- read_excel("coffee_analysis.csv/coffee_complet.xlsx", 
+    col_types = c("text", "text", "text", 
+        "text", "text", "numeric", "numeric", 
+        "text", "text", "text", "text", "text", 
+        "text", "text", "text", "numeric", 
+        "numeric", "text", "text"))
+View(coffee_complet) # Mon jeu de données complet
 
-coffee_backup <- coffee_complet
+coffee_backup <- coffee_complet #Mon backup
+
+library(tidyverse)
+coffee_complet %>% 
+  filter(name != "NA") %>%
+   select(name:review)-> coffee_simplified #Mon jeu de données simplifie 
+
 
 # Analyse univariée -------------------------------------------------------
 
 library(skimr)
-skim(coffee_complet)
+skim(coffee_simplified)
 ```
 ```{r}
-table(coffee_complet$roast)
-barplot(table(coffee_complet$roast))
+
+table(coffee_simplified$roast)
+barplot(table(coffee_simplified$roast))
+
+# Le niveau de torréfaction le plus produit est de moyen-léger (medium-light), suivi par light (léger) et moyenne (medium).
 ```
 
