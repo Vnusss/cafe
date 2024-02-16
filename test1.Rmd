@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
+```{r jeu de données et skim}
 library(readxl)
 coffee_complet <- read_excel("coffee_analysis.csv/coffee_complet.xlsx", 
     col_types = c("text", "text", "text", 
@@ -32,11 +32,32 @@ coffee_complet %>%
 library(skimr)
 skim(coffee_simplified)
 ```
-```{r}
+```{r niveau de torréfaction}
 
 table(coffee_simplified$roast)
 barplot(table(coffee_simplified$roast))
 
 # Le niveau de torréfaction le plus produit est de moyen-léger (medium-light), suivi par light (léger) et moyenne (medium).
 ```
+```{r roaster}
+rev(sort(table(coffee_simplified$roaster)))
+
+# Les torréfacteurs de café le plus utilisées sont Kakalove Cafe et JBC Coffee Roasters (91 les deux), suivi de prés par Paradise Roasters (83) .
+```
+```{r Origin du roaster}
+rev(sort(table(coffee_simplified$loc_country)))
+
+#La majorité des torréfacteurs proviennent des États-Unis (774), Taiwan (338), Hawai'i (76) et, en mineur quantité, Guatemala (24).
+```
+```{r origin du café}
+rev(sort(table(coffee_simplified$origin)))
+# La majorité du café provienne de Éthiopie (447), suivi par la Colombie (151), Kenya (143) et Hawai'i (112).
+
+```
+```{r review_date}
+table(coffee_simplified$review_date)
+
+#Les commentaires sur le café de ce jeu de données ont été faites entre novembre 2017 et novembre 2022.
+```
+
 
