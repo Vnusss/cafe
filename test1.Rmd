@@ -4,11 +4,6 @@ output: html_document
 date: "2024-02-09"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
 ```{r jeu de données et skim}
 library(readxl)
 coffee_complet <- read_excel("coffee_analysis.csv/coffee_complet.xlsx", 
@@ -58,6 +53,49 @@ rev(sort(table(coffee_simplified$origin)))
 table(coffee_simplified$review_date)
 
 #Les commentaires sur le café de ce jeu de données ont été faites entre novembre 2017 et novembre 2022.
+```
+```{r 100gr/USD}
+skim(coffee_simplified$centg_USD)
+
+# En moyenne, le café coûte 10.47 USD / 100 grammes. Cependant, la médiane est de 6.17 USD / 100 grammes.
+# Les ventes varient de 0.17 à 132.28 USD / 100 grammes.
+
+hist(coffee_simplified$centg_USD)
+# La distribution est étalée vers la droite. Il semble que la majorité de café est vendu par moins de 10 USD / 100 grammes.
+# On va essayer de voir plus clair en faisant plus de barres
+hist(coffee_simplified$centg_USD, breaks = 70)
+# Effectivement, il y a une grand quantité de café qui est vendu par moins de 10 USD / 100 grammes.
+# On observe que quelques types de café sont vendus pour plus de 100 USD / 100 grammes.
+# On va jeter un coup d’œil sur ces données.
+
+cafe_cher <- subset(coffee_simplified, centg_USD > 100)
+cafe_cher
+
+# Mama Cata Mokkita est le café le plus cher de ce jeu de données. D'origine panaméenne, il coûte 132.28 USD / 100 grammmes. Aussi, il a la ponctuation la plus haute (97).
+# Dans ce nouveau jeu de données, on trouve que les cafés le plus cher viennent du Panama (2), Ecuador (2) et Éthiopie (1).
+# Il faut signaler que meme si le café Esmeralda Estate Panama Geisha apparaît quatre fois, il s'agit du meme café mais avec des  évaluations qui ont été faites en temps différents. 
+
+
+```
+```{r rating}
+skim(coffee_simplified$rating)
+# En moyenne, la ponctuation est 93.24. La médiane, 93.
+# Les notes vont de 10.58 a 97.
+hist(coffee_simplified$rating)
+# La distribution est étalée vers la gauche. C'est a dire que la majorité de café de ce jeu de données a un bon ponctuation donnée par la public. Par contre, il semble qu'aucun café est noté moins que 80.
+hist(coffee_simplified$rating, breaks=70)
+# Maintenant, on peut observer qu'il y a une petite quantité de café qui a la ponctuation la plus basse.
+# On pourrait regarder quelles sont les plus basse.
+cafe_pirenote <- subset(coffee_simplified, rating < 20)
+cafe_pirenote
+
+# Il s'agit de Salvador, un café d'origine hawaïenne, avec une note de 10.58. Malheureusement, nous n'avons pas l'info sur le prix.
+
+# Et si nous essayons de regarder le café mieux noté?
+cafe_mieuxnote <- subset(coffee_simplified, rating > 96)
+cafe_mieuxnote
+# On trouve entre les cafés les mieux notés, ceux qui viennent du Panama, Kenya, Ethiopie, Colombie et Hawai'i. Tous ont 97, la ponctuation la plus haute de cet échantillon. 
+# On trouve aussi que les prix dans ce groupe sont variées (des 5.29 USD / 100 grammes a 132.28 USD / 100 grammes)
 ```
 
 
